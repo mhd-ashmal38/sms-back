@@ -1,5 +1,7 @@
 const users=require('../Modals/userSchema')
 
+const accounts=require('../Modals/registerSchema')
+
 exports.addUser=async(req,res)=>{
     console.log('inside add user function');
 
@@ -32,7 +34,6 @@ exports.getallUser=async(req,res)=>{
     const search=req.query.search
 
     const query={
-        // fname:{$regex:search,$options:"i"}
         $or: [
             { fname: { $regex: search, $options: "i" } },
             { lname: { $regex: search, $options: "i" } }
@@ -83,3 +84,43 @@ exports.editUser=async(req,res)=>{
         res.status(401).json(err)
     }
 }
+
+// register user
+
+exports.regUser = async (req, res) => {
+    console.log('Inside register user');
+    const { uname, email, password } = req.body;
+
+    try {
+        const preregister = await accounts.findOne({ email });
+        if (preregister) {
+            return res.status(406).json("User already exists");
+        } else {
+            const newregister = new accounts({
+                uname,
+                email,
+                password
+            });
+            await newregister.save();
+            return res.status(200).json(newregister);
+        }
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+
+exports.getAllAccounts = async (req, res) => {
+    console.log('Inside get all accounts');
+
+    try {
+        const allAccounts = await accounts.find({}); // Using find() without any query retrieves all documents
+        return res.status(200).json(allAccounts);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+

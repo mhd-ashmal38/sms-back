@@ -14,4 +14,8 @@ router.delete('/delete-user/:id',userController.deleteUser)
 
 router.put('/edit/user/:id',multerConfig.single("profile"),userController.editUser)
 
+router.post('/register-user',userController.regUser)
+
+router.get('/get-all-accounts',userController.getAllAccounts)
+
 module.exports=router

@@ -7,14 +7,14 @@ require('./DB-connection/connection')
 // step 2 - import express for creating server
 const express=require('express')
 
+// import router
+const router=require('./Routes/router')
+
 // import cors
 const cors=require('cors')
 
 // create server using express
 const smsServer=express()
-
-// import router
-const router=require('./Routes/router')
 
 // use cors in server
 smsServer.use(cors())
